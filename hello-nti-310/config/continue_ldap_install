@@ -1,37 +1,118 @@
 #!/bin/bash
+#TEACHER COMMENTS/EDITS
 #https://www.server-world.info/en/note?os=CentOS_7&p=openldap
 #This is a basis for students to create a fully functioning build, compile, and deploy script.
 
+#this line installs the server and client version of ldap software
 yum -y install openldap-servers openldap-clients
 
+#this line copies /usr/share/openldap-servers/DB_CONFIG.example from the 
+#the software installed above and places the copy into /var/lib/ldap/DB_CONFIG
 cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG 
+
+#this line changes the group and user ownership and gives it to /var/lib/ldap/DB_CONFIG
+#the dot is a shortcode code, it can also be written as ldap:ldap (group and user)
 chown ldap. /var/lib/ldap/DB_CONFIG
 
+#this line enables slapd wich is the daemon name for ldap
 systemctl enable slapd
+
+#this line starts slapd
 systemctl start slapd
 
+#this line is installs httpd for the apache server to operate (http)
 yum -y install httpd
+
+#this line installs the web app for administring ldap servers
 yum -y install phpldapadmin
 
+#TEACHER COMMENTS/EDITS
 # some source editing
 # Tell SE linux what's going on, so that it doesn't freek
+
+#this line allows the apcache server to connect to the ldap server without the ldap server
+#shutting itself down
 setsebool -P httpd_can_connect_ldap on
 
+#this line enables the daemon software installed earlier
+#on the apache server so that it can answer requests for http  
 systemctl enable httpd
+
+#this lin starts the server's software
 systemctl start httpd
 
+#modifies httpd.conf so you can access it from an apache server/external html
 sed -i 's,Require local,#Require local\n    Require all granted,g' /etc/httpd/conf.d/phpldapadmin.conf
 
-# decent config guide: http://www.itzgeek.com/how-tos/linux/centos-how-tos/install-configure-phpldapadmin-centos-7-ubuntu-16-04.html
+#this line copies the config file and makes a backup in case something goes wrong later
+cp /etc/phpldapadmin/config.php /etc/phpldapadmin/config.php.orig
 
+#this line was needed to bring over code from the git repository
+cp /tmp/NTI-310/hello-nti-310/config/config.php /etc/phpldapadmin/config.php
+
+#this line is needed if the line on 45 is used becaues the state of the system things cp means something other than copy
+unalias cp
+#it wasn't needed in the config i was working on - i think because i didn't write line 45 but i'm not sure
+
+#this line changed the ownership of ldap:apache and gave itto the local config??
+chown ldap:apache /etc/phpldapadmin/config.php
+
+#this line was used to move into the temp director so we could make the following
+cd /tmp
+
+#this line was needed because we needed to restart the service after changing ownership??
+systemctl restart httpd.service
+
+#this line creates a password and stores it securely
+newsecret=$(slappasswd -g)
+
+#this line stores the password securley
+newhash=$(slappasswd -s "$newsecret")
+
+#this line takes the pswd and sends it to root
+echo -n "$newsecret" > /root/ldap_admin_pass
+
+#this line changes the read/write/execute bits
+chmod 0600 /root/ldap_admin_pass
+
+#these lines echos so that they can modify the database: 1. so that it is local, 
+#2. so that it takes the old password and 3. replaces it with the new password that
+#is auto generated and secure??
+echo -e "dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=nti310,dc=local
+\n
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootDN: cn=ldapadm,dc=nti310,dc=local
+\n
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: $newhash" > db.ldif
+ 
+ldapmodify -Y EXTERNAL -H ldapi:/// -f db.ldif
+
+
+#TEACHER COMMENTS/EDITS
+# decent config guide: http://www.itzgeek.com/how-tos/linux/centos-how-tos/install-configure-phpldapadmin-centos-7-ubuntu-16-04.html
 #Note: LDAP comes up completely insecure, with Anonymous login enabled by default... this is not a good and happy thing, so fix 
 #it in the config file
 #(prompt for user input), the following is currently a manual config, but could be automated fairly easily
 #slappasswd
 #open tcp port 389
-
 #don't use the eco on the first line
 #this went into a vim
+
+#the next two lines declares what is going on during the install
+#however, in class we made a not of not using them until we were ready to automate
+echo "phpldapadmin is now up and running"
+
+#this line declares what is going on during the install
+echo "we are configuring ldap and ldapadmin"
+
 echo "dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 replace: olcSuffix
