@@ -92,88 +92,50 @@ dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 replace: olcRootPW
 olcRootPW: $newhash" > db.ldif
- 
-ldapmodify -Y EXTERNAL -H ldapi:/// -f db.ldif
 
-
-#TEACHER COMMENTS/EDITS
-# decent config guide: http://www.itzgeek.com/how-tos/linux/centos-how-tos/install-configure-phpldapadmin-centos-7-ubuntu-16-04.html
-#Note: LDAP comes up completely insecure, with Anonymous login enabled by default... this is not a good and happy thing, so fix 
-#it in the config file
-#(prompt for user input), the following is currently a manual config, but could be automated fairly easily
-#slappasswd
-#open tcp port 389
-#don't use the eco on the first line
-#this went into a vim
-
-#the next two lines declares what is going on during the install
-#however, in class we made a not of not using them until we were ready to automate
-echo "phpldapadmin is now up and running"
-
-#this line declares what is going on during the install
-echo "we are configuring ldap and ldapadmin"
-
-echo "dn: olcDatabase={2}hdb,cn=config
-changetype: modify
-replace: olcSuffix
-olcSuffix: dc=nti310,dc=local
-
-#then run on command line: ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
-#now vim
-dn: olcDatabase={2}hdb,cn=config
-changetype: modify
-replace: olcRootDN
-olcRootDN: cn=ldapadm,dc=nti310,dc=local
-
-#then run on command line: ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
-#now vim
-dn: olcDatabase={2}hdb,cn=config
-changetype: modify
-replace: olcRootPW
-olcRootPW: $newhash" >> db.ldif
-
-ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
-
-# Restrict auth
+# Restrict auth from external access 
 echo 'dn: olcDatabase={1}monitor,cn=config
 changetype: modify
 replace: olcAccess
 olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth" read by dn.base="cn=ldapadm,dc=nti310,dc=local" read by * none' > monitor.ldif
 
+#This line is used as the format to exchange data and enable the synchronization of that
+#data between Lightweight Directory Access Protocol ( LDAP ) server s called Directory System Agents (DSAs)
 ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
 
-# Generate certs
+# Generate SSL certs (the padlock on port 443 http)
 openssl req -new -x509 -nodes -out /etc/openldap/certs/nti310ldapcert.pem -keyout /etc/openldap/certs/nti310ldapkey.pem -days 365 -subj "/C=US/ST=WA/L=Seattle/O=SCC/OU=IT/CN=nti310.local"
 
+#changes the ownership from ldap to the local etc/openldap/cert file location
 chown -R ldap. /etc/openldap/certs/nti*.pem
 
-# Use Certs in LDAP
-# split this into two. had to run the second half first, then the ldapmodify file, then the first half second, then the ldapmodify file again
-# in order to make it work it had to be run from the commandline using echo in front of each other
-echo "dn: cn=config
-changetype: modify
-replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/openldap/certs/nti310ldapcert.pem
-
-#this is the second that has to run first - use ecoh in front of first line
+#This line places the keys inside of ldap
 dn: cn=config
 changetype: modify
 replace: olcTLSCertificateKeyFile
 olcTLSCertificateKeyFile: /etc/openldap/certs/nti310ldapkey.pem" > certs.ldif
 
+echo "dn: cn=config
+changetype: modify
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/openldap/certs/nti310ldapcert.pem
+
+#this line does the modification of the above lines
 ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
 
-# Test cert configuration
+#this line tests to make sure it works
 slaptest -u
 
+#this line changes cp alias
 unalias cp
 
+#run the following schemas one at at time
 ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
 ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
 ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
-# Create base group and people structure
-#the vim base.ldif needs the spaces below, then on the command line: ldapadd -x -W -D "cn=ldapadm,dc=nti310,dc=local" -f base.ldif 
+#TEACHER COMMENTS Create base group and people structure
+#TEACHER COMMENTS the vim base.ldif needs the spaces below, then on the command line: ldapadd -x -W -D "cn=ldapadm,dc=nti310,dc=local" -f base.ldif 
 echo "dn: dc=nti310,dc=local
 dc: nti310
 objectClass: top
@@ -192,12 +154,79 @@ dn: ou=Group,dc=nti310,dc=local
 objectClass: organizationalUnit
 ou: Group" > base.ldif
 
-#didn't use any part of this line past base.ldif
+#This line turns off SE Linux - the security features 
+setenforce 0
+
+#this line reads the password and passes it through
 ldapadd -x -W -D "cn=ldapadm,dc=nti310,dc=local" -f base.ldif -y /root/ldap_admin_pass
+
+#this line restarts the system
+systemctl restart httpd
+
+
+
+
+
+
+
+
+
+
+
+
+#------------------------UNUSED PIECES FROM HERE DOWN--------------------------------------------------
+#TEACHER COMMENTS/EDITS
+# decent config guide: http://www.itzgeek.com/how-tos/linux/centos-how-tos/install-configure-phpldapadmin-centos-7-ubuntu-16-04.html
+#Note: LDAP comes up completely insecure, with Anonymous login enabled by default... this is not a good and happy thing, so fix 
+#it in the config file
+#(prompt for user input), the following is currently a manual config, but could be automated fairly easily
+#slappasswd
+#open tcp port 389
+#don't use the eco on the first line
+#this went into a vim
+
+#the next two lines declares what is going on during the install
+#however, in class we made a not of not using them until we were ready to automate
+#echo "phpldapadmin is now up and running"
+
+#this line declares what is going on during the install
+#echo "we are configuring ldap and ldapadmin"
+
+#echo "dn: olcDatabase={2}hdb,cn=config
+#changetype: modify
+#replace: olcSuffix
+#olcSuffix: dc=nti310,dc=local
+
+#then run on command line: ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
+#now vim
+#dn: olcDatabase={2}hdb,cn=config
+#changetype: modify
+#replace: olcRootDN
+#olcRootDN: cn=ldapadm,dc=nti310,dc=local
+
+#then run on command line: ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
+#now vim
+#dn: olcDatabase={2}hdb,cn=config
+#changetype: modify
+#replace: olcRootPW
+#olcRootPW: $newhash" >> db.ldif
+
+#ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
+
+# Use Certs in LDAP
+# split this into two. had to run the second half first, then the ldapmodify file, then the first half second, then the ldapmodify file again
+# in order to make it work it had to be run from the commandline using echo in front of each other
+
+#this is the second that has to run first - use ecoh in front of first line
+
+#ldapmodify -Y EXTERNAL -H ldapi:/// -f db.ldif
+
+#This line 
+#didn't use any part of this line past base.ldif
 
 #on the web page didn't get in until the file looked liked this:
 ##  Web-based tool for managing LDAP servers
-#
+
 #Alias /phpldapadmin /usr/share/phpldapadmin/htdocs
 #Alias /ldapadmin /usr/share/phpldapadmin/htdocs
 #<Directory /usr/share/phpldapadmin/htdocs>
