@@ -1,4 +1,5 @@
-#!bin/bash
+#!/bin/bash
+#This script spins up an NFS server
 
 yum install -y nfs-utils
 mkdir /var/nfsshare
@@ -20,7 +21,7 @@ echo "/var/nfsshare/home_dirs *(rw,sync,no_all_squash)
 /var/nfsshare/testing *(rw,sync,no_all_squash)" >> /etc/exports
 
 #not sure if i had to close the quote at the end of /etc/exports or not
-/var/nfsshare/testing *(rw,sync,no_all_squash) >> /etc/exports"
+#/var/nfsshare/testing *(rw,sync,no_all_squash) >> /etc/exports"
 
 systemctl restart nfs-server
 
