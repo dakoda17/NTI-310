@@ -1,0 +1,7 @@
+#!bin ?
+
+#this script install ldapclient. It runs from the client-a 
+apt-get updates
+apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
+
+#on the purple screen you have to type in the ldap sever's name - mine was: ldapc
