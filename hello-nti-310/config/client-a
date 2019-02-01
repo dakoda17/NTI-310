@@ -1,0 +1,16 @@
+#!/bin/bash
+#This script spins up an ubuntu client-a
+
+apt-get install -y nfs-client
+
+#a testing location
+mkdir /mnt/test
+
+#this line 
+echo "10.142.0.9:/var/nfsshare/testing     /mnt/test     nfs     defaults 0 0" >> /etc/fstab
+
+#this line proves its in the file
+vim /etc/fstab
+
+#this line mounts it
+mount -a
