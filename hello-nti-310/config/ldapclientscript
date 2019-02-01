@@ -1,6 +1,6 @@
-#!bin ?
+#!/bin/bash
+#This script spins up an ldapclient. It runs from the client-a 
 
-#this script install ldapclient. It runs from the client-a 
 apt-get updates
 apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
 
