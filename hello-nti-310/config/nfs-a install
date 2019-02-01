@@ -29,7 +29,16 @@ systemctl restart nfs-server
 yum -y install net-tools
 
 #ifconfig with ip address
+
+#used showmount -e 10.142.0.9 to prove mount
+
+#these lines bring back the ip for automation
+#ipaddress=$(ifconfig | grep broadcast | awk '{print $2}')
+#echoecho $ipaddress
+
+#this line proves its a variable
+#env | grep -i ip
 #ignored the next line for now
 #apt-get install nfs-client
-#used showmount -e 10.142.0.9 to prove mount
-mkdir /mnt/test
+
+#mkdir /mnt/test
