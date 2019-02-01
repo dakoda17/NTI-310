@@ -2,10 +2,8 @@
 #This script spins up an ldapclient. It runs from the client-a 
 
 apt-get updates
-apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
-
 #on the purple screen you have to type in the ldap sever's name - mine was: ldapc
-apt-get install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
+apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
 
 #this line opnened up this file and we made edits to the file
 vim /etc/nsswitch.conf
