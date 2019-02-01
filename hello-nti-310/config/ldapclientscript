@@ -5,3 +5,19 @@ apt-get updates
 apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
 
 #on the purple screen you have to type in the ldap sever's name - mine was: ldapc
+apt-get install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
+
+#this line opnened up this file and we made edits to the file
+vim /etc/nsswitch.conf
+
+#this line opened up this file and we made edits to the file
+vim /etc/ldap/ldap.conf
+
+#this line restarted the system
+/etc/init.d/nslcd restart
+
+#the following line did not work as expected and it is commented out 
+#getent passwd
+
+#this line was the alternative to line 20 and it did work - it showed all the users/groups we had previously made on the ldap server
+ldapsearch -b "dc=nti310,dc=local" -x -d 1 2>> output.txt
