@@ -20,7 +20,6 @@ unset DEBIAN_FRONTEND
 
 #format of sed: sed -i 's/thing1/thing2/g' OR
 #sed -i(insert) 's(search)$(for)thing1&
-#we used this line: apt-get install debconf-utils
 #we used this line: debconf-get-selections | grep ^ldap
 
 
