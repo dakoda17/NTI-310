@@ -51,5 +51,9 @@ sudo auth-client-config -t nss -p lac_ldap
 
 echo "account sufficient pam_succeed_if.so uid = 0 use_uid quiet" >> /etc/pam.d/su
 
+sed -i 's/base dc=example,dc=net/base dc=nti310,dc=local/g' /etc/ldap.conf
+sed -i 's/,uri ldapi:///,uri ldap://ldapc/,g' /etc/ldap.conf
+sed -i 's/rootbinddn cn=manager,dc=example,dc=net/rootbinddn cn=ldapadm,dc=nti310,dc=local/g' /etc/ldap.conf
+
 systemctl restart nscd
 systemctl enable nscd
