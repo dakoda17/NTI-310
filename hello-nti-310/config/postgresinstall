@@ -43,7 +43,7 @@ systemctl enable httpd.service
 setsebool -P httpd_can_network_connect on
 setsebool -P httpd_can_network_connect_db on
 
-sudo vi /var/lib/pgsql/data/postgresql.conf
+#sudo vi /var/lib/pgsql/data/postgresql.conf
 yum install -y php php-pgsql
 
 sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
@@ -57,7 +57,7 @@ sudo -u postgres /bin/psql -f /tmp/phpmyadmin
 yum install -y phpPgAdmin
 yum install -y php php-pgsql
 
-sudo vi /etc/httpd/conf.d/phpPgAdmin.conf
+#sudo vi /etc/httpd/conf.d/phpPgAdmin.conf
 
 sed -i 's/Require local/Require all granted/g' /etc/httpd/conf.d/phpPgAdmin.conf
 sed -i 's/Deny from all/Allow from all/g' /etc/httpd/conf.d/phpPgAdmin.conf
