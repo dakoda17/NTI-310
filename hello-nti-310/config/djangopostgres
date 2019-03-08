@@ -1,1 +1,29 @@
+#!/bin/bash
+#This script migrates djangopostres
 
+yum -y install python-pip
+pip install virtualenv
+pip install --upgrade pip
+
+#make a dir on root called myproject, cd into it, activate, and run from inside 
+mkdir ~/myproject
+cd ~/myproject
+virtualenv myprojectenv
+
+#
+source myprojectenv/bin/activate
+pip install django psycopg2
+django-admin.py startproject myproject .
+
+#vim into vim  ~/myproject/myproject/settings.py
+#and change the following to: 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'myproject',
+#        'USER': 'myprojectuser',
+#        'PASSWORD': 'password',
+#        'HOST': 'postgresa',
+#        'PORT': '5432',
+#    }
+#}
