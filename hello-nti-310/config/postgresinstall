@@ -32,7 +32,7 @@ ALTER ROLE myprojectuser SET timezone TO 'UTC';
 GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" >> /tmp/tempfile
 
 #for automation
-sudo -u postgres /bin/psql -fvim /tmp/tempfile
+sudo -u postgres /bin/psql -f /tmp/tempfile
 
 #Begin Django from root
 yum -y install httpd
