@@ -1,4 +1,5 @@
-
+#!/bin/bash
+#This script spins up an rsyslog client
 
 #client automation
 yum -y update && yum -y install rsyslog
