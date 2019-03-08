@@ -14,4 +14,4 @@ systemctl enable rsyslog
 
 #use the following to check to see that the client is logging onto the rsyslog server
 #tail -F var/log/messages 
-#echo "some text | logger"
+#echo "some text" | logger - this is a neat way to monitor what your rsyslog server is doing
