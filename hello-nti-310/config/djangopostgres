@@ -31,4 +31,4 @@ django-admin.py startproject myproject .
 python manage.py makemigrations
 python manage.py migrate
 
-wget -O ~/myproject/myproject/settings.py https://raw.githhubuser.com/
+wget -O ~/myproject/myproject/settings.py https://github.com/dakoda17/NTI-310/blob/master/settings.py
