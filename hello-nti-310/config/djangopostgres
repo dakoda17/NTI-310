@@ -27,3 +27,8 @@ django-admin.py startproject myproject .
 #        'PORT': '5432',
 #    }
 #}
+
+python manage.py makemigrations
+python manage.py migrate
+
+wget -O ~/myproject/myproject/settings.py https://raw.githhubuser.com/
