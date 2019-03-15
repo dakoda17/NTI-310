@@ -1,0 +1,14 @@
+#https://github.com/nic-instruction/hello-nti-310/blob/master/automate.md
+
+
+gcloud compute instances create rsyslog-server2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+--tags "http-server","https-server" \
+--machine-type f1-micro \
+--scopes cloud-platform
+
+
+#this line will automate from where you said it would in the script.sh
+#--metadata-from-file startup-script=/path/to/script.sh
