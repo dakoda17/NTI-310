@@ -64,14 +64,18 @@ cd /tmp
 systemctl restart httpd.service
 
 #this line creates a password and stores it securely
-newsecret=$(slappasswd -g)
-
+#newsecret=$(slappasswd -g)
+#hardcoding on the next line for the clients to come
+newsecret="mypassword"
 #this line stores the password securley
-newhash=$(slappasswd -s "$newsecret")
+#newhash=$(slappasswd -s "$newsecret")
+#hardcode in this line:
+newhash=(slappasswd -s "mypassword")
 
 #this line takes the pswd and sends it to root
-echo -n "$newsecret" > /root/ldap_admin_pass
-
+#echo -n "$newsecret" > /root/ldap_admin_pass
+#hardcode this line:
+echo -n "mypassword" > /root/ldap_admin_pass
 #this line changes the read/write/execute bits
 chmod 0600 /root/ldap_admin_pass
 
