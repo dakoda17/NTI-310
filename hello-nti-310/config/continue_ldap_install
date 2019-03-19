@@ -146,7 +146,7 @@ dc: nti310
 objectClass: top
 objectClass: domain
 
-dn: cn=ldapadm ,dc=nti310,dc=local
+dn: cn=ldapadm,dc=nti310,dc=local
 objectClass: organizationalRole
 cn: ldapadm
 description: LDAP Manager
