@@ -9,7 +9,7 @@ gcloud compute instances create rsyslog2 \
 #--tags "http-server","https-server" \ - this line is not required 
 --machine-type f1-micro \
 --scopes cloud-platform \
---metadata-from-file startup-script=NTI-310/hello-nti-310/config/
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/Rsyslog
 sleep 30s
 
 #2 This script spins up a postgres server
