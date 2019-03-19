@@ -11,7 +11,7 @@ mkdir /mnt/test
 echo "nfs-a:/var/nfsshare/testing     /mnt/test     nfs     defaults 0 0" >> /etc/fstab
 
 #this line proves its in the file
-vim /etc/fstab
+#vim /etc/fstab
 
 #this line mounts it
 mount -a
