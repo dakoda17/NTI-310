@@ -10,6 +10,7 @@ gcloud compute instances create rsyslog2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/
+sleep 30s
 
 #2 This script spins up a postgres server
 gcloud compute instances create postgres2 \
@@ -20,10 +21,17 @@ gcloud compute instances create postgres2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/postgrestest1
+sleep 30s
+#This script spins up an rsyslog client
+yum -y update && yum -y install rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
+cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "postgrestest1@@rsyslog:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
 systemctl enable rsyslog
+sleep 15s
 
 #3 This script spins up an ldap server
 gcloud compute instances create ldap2 \
@@ -34,10 +42,17 @@ gcloud compute instances create ldap2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
+sleep 30s
+#This script spins up an rsyslog client
+yum -y update && yum -y install rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
+cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "continue_ldap_install@@rsyslog:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
 systemctl enable rsyslog
+sleep 15s
 
 #4 This script spins up a nfs server
 gcloud compute instances create nfs2 \
@@ -48,10 +63,17 @@ gcloud compute instances create nfs2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/nfs-a install
+sleep 30s
+#This script spins up an rsyslog client
+yum -y update && yum -y install rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
+cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "nfs-a install@@rsyslog:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
 systemctl enable rsyslog
+sleep 15s
 
 #5 This script spins up a django  server
 gcloud compute instances create django2 \
@@ -62,10 +84,17 @@ gcloud compute instances create django2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/djangopostgres
+sleep 30s
+#This script spins up an rsyslog client
+yum -y update && yum -y install rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
+cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "djangopostgres@@rsyslog:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
 systemctl enable rsyslog
+sleep 15s
 
 #6 This script spins up nfsclient2 
 gcloud compute instances create nfsclient2 \
@@ -76,6 +105,7 @@ gcloud compute instances create nfsclient2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/client-a
+sleep 10s
 
 #7 This script spins up ldapclient2 
 gcloud compute instances create ldapclient2 \
