@@ -43,7 +43,7 @@ ldap-auth-config ldap-auth-config/dblogin boolean false" >> tempfile
 
 while read line; do echo "$line" | debconf-set-selections; done < tempfile
 
-echo "OkBWKtZ9" > /etc/ldap.secret
+echo "mypassword" > /etc/ldap.secret
 
 chown 600 /etc/ldap.secret
 
