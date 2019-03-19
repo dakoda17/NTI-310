@@ -1,4 +1,14 @@
 #!/bin/bash
 #this is my final to spin up a network
 
+#This script spins up an rsyslog server
+yum -y update && yum -y install rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
+cp /etc/rsyslog.conf /etc/rsyslog.bak
+sed -i 's /#$UDPServerRun 514/$UDPServerRun 514/g' /etc/rsyslog.conf
+sed -i 's /#$InputTCPServerRun 514/$InputTCPServerRun 514/g' /etc/rsyslog.conf
+sed -i 's /#$ModLoad imudp/$ModLoad imudp/g' /etc/rsyslog.conf
+sed -i 's /#$ModLoad imtcp/$ModLoad imtcp/g' /etc/rsyslog.conf
+systemctl restart rsyslog
 
