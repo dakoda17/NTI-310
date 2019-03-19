@@ -2,81 +2,71 @@
 #this is my final to spin up a network
 
 #1 This script spins up an rsyslog server
-yum -y update && yum -y install rsyslog
-systemctl start rsyslog
-systemctl enable rsyslog
-cp /etc/rsyslog.conf /etc/rsyslog.bak
-sed -i 's /#$UDPServerRun 514/$UDPServerRun 514/g' /etc/rsyslog.conf
-sed -i 's /#$InputTCPServerRun 514/$InputTCPServerRun 514/g' /etc/rsyslog.conf
-sed -i 's /#$ModLoad imudp/$ModLoad imudp/g' /etc/rsyslog.conf
-sed -i 's /#$ModLoad imtcp/$ModLoad imtcp/g' /etc/rsyslog.conf
-systemctl restart rsyslog
+gcloud compute instances create rsyslog2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+#--tags "http-server","https-server" \ - this line is not required 
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 
-#2 Postgres: Like a sql server but totally cl
-#Allow http and https to allow webbased access/traffic
-#Attach djanog front-end to teh back end of postgres
+#2 This script spins up a postgres server
+gcloud compute instances create postgres2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+--tags "http-server","https-server" \
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 
-#by default Centos already has this so we don't need it...all the yummy things
-#sudo yum install epel-release
+#3 This script spins up an ldap server
+gcloud compute instances create ldap2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+--tags "http-server","https-server" \
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 
-#install packages gcc=gnu compiler
-yum -y install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib
-postgresql-setup initdb
-systemctl start postgresql
+#4 This script spins up a nfs server
+gcloud compute instances create nfs2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+#--tags "http-server","https-server" \ - this line is not required
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 
-#vim /var/lib/pgsql/data/pg_hba.conf
-#the automation for this vim file
-sed -i 's,host    all             all             127.0.0.1/32            ident,host     all             all             0.0.0.0/0               md5,g' /var/lib/pgsql/data/pg_hba.conf
-sed -i 's,host    all             all             ::1/128                 ident,host     all             all             127.0.0.1/32            md5,g' /var/lib/pgsql/data/pg_hba.conf
+#5 This script spins up a django  server
+gcloud compute instances create django2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+--tags "http-server","https-server" \
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 
-systemctl restart postgresql
-systemctl enable postgresql
+#6 This script spins up client1 
+gcloud compute instances create client1 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+#--tags "http-server","https-server" \ - this line not required
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 
-#manually
-#su -u postgres
-
-echo "CREATE DATABASE myproject;
-CREATE USER myprojectuser WITH PASSWORD 'password';
-ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
-ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
-ALTER ROLE myprojectuser SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" >> /tmp/tempfile
-
-#for automation
-sudo -u postgres /bin/psql -f /tmp/tempfile
-
-#Begin Django from root
-yum -y install httpd
-systemctl start httpd.service
-systemctl enable httpd.service
-
-#for interacting with SELinux - a form of security ie., allow network and database server comm.
-setsebool -P httpd_can_network_connect on
-setsebool -P httpd_can_network_connect_db on
-
-#sudo vi /var/lib/pgsql/data/postgresql.conf
-yum install -y php php-pgsql
-
-sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
-sed -i 's/#port = 5432/port = 5432/g' /var/lib/pgsql/data/postgresql.conf
-
-echo "CREATE USER pgdbuser CREATEDB CREATEUSER ENCRYPTED PASSWORD 'pgdbpass';
-CREATE DATABASE mypgdb OWNER pgdbuser;" > /tmp/phpmyadmin
-
-sudo -u postgres /bin/psql -f /tmp/phpmyadmin
-
-yum install -y phpPgAdmin
-yum install -y php php-pgsql
-
-#sudo vi /etc/httpd/conf.d/phpPgAdmin.conf
-
-sed -i 's/Require local/Require all granted/g' /etc/httpd/conf.d/phpPgAdmin.conf
-sed -i 's/Deny from all/Allow from all/g' /etc/httpd/conf.d/phpPgAdmin.conf
-sed -i "s/$conf\['servers'\]\[0\]\['host'\] = '';/$conf['servers'][0]['host'] = 'localhost';/g" /etc/phpPgAdmin/config.inc.php
-sed -i "s/$conf\['owned_only'\] = false;/$conf['owned_only'] = true;/g" /etc/phpPgAdmin/config.inc.php
-
-
-systemctl restart httpd
-systemctl restart postgresql
-
-#ip address change: remove s on https, at the end of the ip: /phpPgAdmin/
+#7 This script spins up client2 
+gcloud compute instances create client2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-b \
+#--tags "http-server","https-server" \ - this line not required
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
