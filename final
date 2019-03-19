@@ -69,8 +69,8 @@ systemctl enable rsyslog
 
 #6 This script spins up nfsclient2 
 gcloud compute instances create nfsclient2 \
---image-family centos-7 \
---image-project centos-cloud \
+--image-family ubuntu-1804-lts \
+--image-project ubuntu-os-cloud \
 --zone us-east1-b \
 #--tags "http-server","https-server" \ - this line not required
 --machine-type f1-micro \
@@ -79,8 +79,8 @@ gcloud compute instances create nfsclient2 \
 
 #7 This script spins up ldapclient2 
 gcloud compute instances create ldapclient2 \
---image-family centos-7 \
---image-project centos-cloud \
+--image-family ubuntu-1804-lts \
+--image-project ubuntu-os-cloud \
 --zone us-east1-b \
 #--tags "http-server","https-server" \ - this line not required
 --machine-type f1-micro \
