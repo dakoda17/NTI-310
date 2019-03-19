@@ -85,4 +85,4 @@ gcloud compute instances create ldapclient2 \
 #--tags "http-server","https-server" \ - this line not required
 --machine-type f1-micro \
 --scopes cloud-platform \
---metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/ldapclient.sh
