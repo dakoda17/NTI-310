@@ -20,6 +20,11 @@ gcloud compute instances create postgres2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
+#needs to be the name of the client rsyslog server
+echo "postgrestest1@@rsyslog:514" >> /etc/rsyslog.conf
+systemctl restart rsyslog
+systemctl enable rsyslog
+
 
 #3 This script spins up an ldap server
 gcloud compute instances create ldap2 \
@@ -30,6 +35,10 @@ gcloud compute instances create ldap2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
+#needs to be the name of the client rsyslog server
+echo "continue_ldap_install@@rsyslog:514" >> /etc/rsyslog.conf
+systemctl restart rsyslog
+systemctl enable rsyslog
 
 #4 This script spins up a nfs server
 gcloud compute instances create nfs2 \
@@ -40,6 +49,10 @@ gcloud compute instances create nfs2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
+#needs to be the name of the client rsyslog server
+echo "nfs-a install@@rsyslog:514" >> /etc/rsyslog.conf
+systemctl restart rsyslog
+systemctl enable rsyslog
 
 #5 This script spins up a django  server
 gcloud compute instances create django2 \
@@ -50,6 +63,10 @@ gcloud compute instances create django2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
+#needs to be the name of the client rsyslog server
+echo "*.*  @@rsyslog:514" >> /etc/rsyslog.conf
+systemctl restart rsyslog
+systemctl enable rsyslog
 
 #6 This script spins up client1 
 gcloud compute instances create client1 \
