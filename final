@@ -64,7 +64,7 @@ gcloud compute instances create nfs2 \
 --zone us-east1-b \
 --machine-type f1-micro \
 --scopes cloud-platform \
---metadata-from-file startup-script=NTI-310/hello-nti-310/config/nfs-a install
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/nfs_install
 #sleep 30s
 #This script spins up an rsyslog client
 vim NTI-310/hello-nti-310/config/nfs-a install
