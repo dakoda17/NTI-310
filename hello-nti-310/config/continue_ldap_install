@@ -189,7 +189,7 @@ objectclass: top
 sn: Person1
 uid: Person1
 uidnumber: 1001
-userpassword: mypassword
+userpassword: {SHA}R5nV3A38+e62G8u5F7tcdLoyZtg=
 \n
 dn: cn=Person2,ou=People,dc=nti310,dc=local
 cn: Person2
