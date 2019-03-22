@@ -4,7 +4,9 @@
 #This is a basis for students to create a fully functioning build, compile, and deploy script.
 
 #this line installs the server and client version of ldap software
-yum -y install openldap-servers openldap-clients
+yum -y install openldap-servers openldap-clients git
+cd /tmp
+git clone https://github.com/nic-instruction/hello-nti-310.git
 
 #this line copies /usr/share/openldap-servers/DB_CONFIG.example from the 
 #the software installed above and places the copy into /var/lib/ldap/DB_CONFIG
@@ -48,7 +50,7 @@ sed -i 's,Require local,#Require local\n    Require all granted,g' /etc/httpd/co
 cp /etc/phpldapadmin/config.php /etc/phpldapadmin/config.php.orig
 
 #this line was needed to bring over code from the git repository
-cp /tmp/NTI-310/hello-nti-310/config/config.php /etc/phpldapadmin/config.php
+cp /tmp/hello-nti-310/config/config.php /etc/phpldapadmin/config.php
 
 #this line is needed if the line on 45 is used becaues the state of the system things cp means something other than copy
 unalias cp
