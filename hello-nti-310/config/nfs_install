@@ -1,1 +1,44 @@
+#!/bin/bash
+#This script spins up an NFS server
 
+yum install -y nfs-utils
+mkdir /var/nfsshare
+mkdir /var/nfsshare/devstuff
+mkdir /var/nfsshare/testing
+mkdir /var/nfsshare/home_dirs
+chmod -R 777 /var/nfsshare/
+systemctl enable rpcbind
+systemctl enable nfs-server
+systemctl enable nfs-lock
+systemctl enable nfs-idmap
+systemctl start rpcbind
+systemctl start nfs-server
+systemctl start nfs-lock
+systemctl start nfs-idmap
+cd /var/nfsshare/
+echo "/var/nfsshare/home_dirs *(rw,sync,no_all_squash)
+/var/nfsshare/devstuff *(rw,sync,no_all_squash)
+/var/nfsshare/testing *(rw,sync,no_all_squash)" >> /etc/exports
+
+#not sure if i had to close the quote at the end of /etc/exports or not
+#/var/nfsshare/testing *(rw,sync,no_all_squash) >> /etc/exports"
+
+systemctl restart nfs-server
+
+#this line returned a statement saying it was already installed and there was nothing to do
+yum -y install net-tools
+
+#ifconfig with ip address
+
+#used showmount -e 10.142.0.9 to prove mount
+
+#these lines bring back the ip for automation
+#ipaddress=$(ifconfig | grep broadcast | awk '{print $2}')
+#echoecho $ipaddress
+
+#this line proves its a variable
+#env | grep -i ip
+#ignored the next line for now
+#apt-get install nfs-client
+
+#mkdir /mnt/test
