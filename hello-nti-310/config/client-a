@@ -8,7 +8,7 @@ apt-get install -y nfs-client
 mkdir /mnt/test
 
 #this line echos the files and places them in the /etc/fstab
-echo "nfs-a:/var/nfsshare/testing     /mnt/test     nfs     defaults 0 0" >> /etc/fstab
+echo "nfs2:/var/nfsshare/testing     /mnt/test     nfs     defaults 0 0" >> /etc/fstab
 
 #this line proves its in the file
 #vim /etc/fstab
