@@ -23,7 +23,7 @@ gcloud compute instances create postgres2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/postgrestest1
 #sleep 30s
 #This script spins up an rsyslog client
-yum -y update && yum -y install rsyslog
+yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
 cp /etc/rsyslog.conf /etc/rsyslog.bak
@@ -44,7 +44,7 @@ gcloud compute instances create ldap2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 #sleep 30s
 #This script spins up an rsyslog client
-yum -y update && yum -y install rsyslog
+yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
 cp /etc/rsyslog.conf /etc/rsyslog.bak
@@ -65,7 +65,7 @@ gcloud compute instances create nfs2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/nfs-a install
 #sleep 30s
 #This script spins up an rsyslog client
-yum -y update && yum -y install rsyslog
+yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
 cp /etc/rsyslog.conf /etc/rsyslog.bak
@@ -86,7 +86,7 @@ gcloud compute instances create django2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/djangopostgres
 #sleep 30s
 #This script spins up an rsyslog client
-yum -y update && yum -y install rsyslog
+yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
 cp /etc/rsyslog.conf /etc/rsyslog.bak
