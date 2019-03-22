@@ -6,7 +6,6 @@ gcloud compute instances create rsyslog2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-b \
-#--tags "http-server","https-server" \ - this line is not required 
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/Rsyslog
@@ -23,6 +22,8 @@ gcloud compute instances create postgres2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/postgrestest1
 #sleep 30s
 #This script spins up an rsyslog client
+vim NTI-310/hello-nti-310/config/postgrestest1
+echo "
 yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
@@ -30,7 +31,7 @@ cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "*.*@@rsyslog2:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
-systemctl enable rsyslog
+systemctl enable rsyslog"
 #sleep 15s
 
 #3 This script spins up an ldap server
@@ -44,6 +45,8 @@ gcloud compute instances create ldap2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 #sleep 30s
 #This script spins up an rsyslog client
+vim NTI-310/hello-nti-310/config/continue_ldap_install
+echo "
 yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
@@ -51,7 +54,7 @@ cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "*.*@@rsyslog2:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
-systemctl enable rsyslog
+systemctl enable rsyslog"
 #sleep 15s
 
 #4 This script spins up a nfs server
@@ -59,12 +62,13 @@ gcloud compute instances create nfs2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-b \
-#--tags "http-server","https-server" \ - this line is not required
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/nfs-a install
 #sleep 30s
 #This script spins up an rsyslog client
+vim NTI-310/hello-nti-310/config/nfs-a install
+echo "
 yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
@@ -72,7 +76,7 @@ cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "*.*@@rsyslog2:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
-systemctl enable rsyslog
+systemctl enable rsyslog"
 #sleep 15s
 
 #5 This script spins up a django  server
@@ -86,6 +90,8 @@ gcloud compute instances create django2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/djangopostgres
 #sleep 30s
 #This script spins up an rsyslog client
+vim NTI-310/hello-nti-310/config/djangopostgres
+echo "
 yum -y install && yum -y update rsyslog
 systemctl start rsyslog
 systemctl enable rsyslog
@@ -93,7 +99,7 @@ cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "*.*@@rsyslog2:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
-systemctl enable rsyslog
+systemctl enable rsyslog"
 #sleep 15s
 
 #6 This script spins up nfsclient2 
@@ -101,7 +107,6 @@ gcloud compute instances create nfsclient2 \
 --image-family ubuntu-1804-lts \
 --image-project ubuntu-os-cloud \
 --zone us-east1-b \
-#--tags "http-server","https-server" \ - this line not required
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/client-a
@@ -112,7 +117,6 @@ gcloud compute instances create ldapclient2 \
 --image-family ubuntu-1804-lts \
 --image-project ubuntu-os-cloud \
 --zone us-east1-b \
-#--tags "http-server","https-server" \ - this line not required
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/ldapclient.sh
