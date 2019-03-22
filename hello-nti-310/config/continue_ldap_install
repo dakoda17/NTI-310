@@ -102,7 +102,7 @@ ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
 echo 'dn: olcDatabase={1}monitor,cn=config
 changetype: modify
 replace: olcAccess
-olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth" read by dn.base="cn=ldapadm,dc=nti310,dc=local" read by * none' > monitor.ldif
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=ldapadm,dc=nti310,dc=local" read by * none' > monitor.ldif
 
 #This line is used as the format to exchange data and enable the synchronization of that
 #data between Lightweight Directory Access Protocol ( LDAP ) server s called Directory System Agents (DSAs)
@@ -115,15 +115,15 @@ openssl req -new -x509 -nodes -out /etc/openldap/certs/nti310ldapcert.pem -keyou
 chown -R ldap. /etc/openldap/certs/nti*.pem
 
 #This line places the keys inside of ldap
-dn: cn=config
+echo -e "dn: cn=config
 changetype: modify
 replace: olcTLSCertificateKeyFile
 olcTLSCertificateKeyFile: /etc/openldap/certs/nti310ldapkey.pem" > certs.ldif
-
-echo "dn: cn=config
+\n
+"dn: cn=config
 changetype: modify
 replace: olcTLSCertificateFile
-olcTLSCertificateFile: /etc/openldap/certs/nti310ldapcert.pem
+olcTLSCertificateFile: /etc/openldap/certs/nti310ldapcert.pem"
 
 #this line does the modification of the above lines
 ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
@@ -141,7 +141,7 @@ ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 #TEACHER COMMENTS Create base group and people structure
 #TEACHER COMMENTS the vim base.ldif needs the spaces below, then on the command line: ldapadd -x -W -D "cn=ldapadm,dc=nti310,dc=local" -f base.ldif 
-echo "dn: dc=nti310,dc=local
+echo -e "dn: dc=nti310,dc=local
 dc: nti310
 objectClass: top
 objectClass: domain
