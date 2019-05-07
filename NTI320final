@@ -40,7 +40,7 @@ gcloud compute instances create postgres2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/postgrestest1
 #sleep 30s
 #This script spins up an rsyslog client
-vim NTI-310/hello-nti-310/config/postgrestest1
+#vim NTI-310/hello-nti-310/config/postgrestest1
 #sleep 15s
 
 #5 This script spins up an ldap server
@@ -54,7 +54,7 @@ gcloud compute instances create ldap2 \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
 #sleep 30s
 #This script spins up an rsyslog client
-vim NTI-310/hello-nti-310/config/continue_ldap_install
+#vim NTI-310/hello-nti-310/config/continue_ldap_install
 
 #6 This script spins up a nfs server
 gcloud compute instances create nfs2 \
