@@ -1,0 +1,54 @@
+#!/bin/bash
+yum -y install nagios
+systemctl enable nagios
+systemctl start nagios
+setenforce 0
+yum -y install httpd
+systemctl enable httpd
+systemctl start httpd
+yum -y install nrpe
+systemctl enable nrpe
+systemctl start nrpe
+yum -y  install nagios-plugins-all
+yum -y install nagios-plugins-nrpe
+htpasswd -b -c /etc/nagios/passwd nagiosadmin nagiosadmin
+chmod 666 /var/log/nagios/nagios.log 
+mkdir /etc/nagios/servers
+sed -i '51 s/^#//' /etc/nagios/nagios.cfg 
+
+/usr/sbin/nagios -v /etc/nagios/nagios.cfg
+systemctl restart nagios
+
+#we also used this for the server
+./generate_config.sh web-a2 10.150.0.4
+systemctl restart nagios
+echo "define command{
+                                command_name check_nrpe
+                                command_line /usr/lib64/nagios/plugins/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+                                }" >> /etc/nagios/objects/commands.cfg
+
+# Note: I had to add user nicolebade to group nagios using:
+usermod -a -G nagios koda
+# I also had to:
+chmod 777 /etc/nagios/servers
+
+#chmod +x /usr/lib64/nagios/plugins/check_mem.sh
+
+#for the client
+#yum -y install nagios-nrpe-server nagios-plugins
+#yum -y install nrpe
+#sed -i 's/allowed_hosts=127.0.0.1/allowed_hosts=127.0.0.1, 10.150.0.2/g' /etc/nagios/nrpe.cfg
+#systemctl restart nrpe
+#sed -i 's/#command[check_mem]=/usr/lib64/nagios/plugins/custom_check_mem -n $ARG1$/g' command[check_mem]=/usr/lib64/nagios/plugins/check_mem.sh -w 80 -c 90
+
+#for problem solving the server:
+# /usr/lib64/nagios/plugins/check_nrpe -H 10:wq
+#:wq.150.0.4 (this is the internal IP of the client) -c check_mem (OR can also try check_load)
+# the return should look like:
+#[root@nagios4419 koda]# /usr/lib64/nagios/plugins/check_nrpe -H 10.150.0.4 -c check_mem
+#NRPE: Command 'check_mem' not defined
+#[root@nagios4419 koda]# /usr/lib64/nagios/plugins/check_nrpe -H 10.150.0.4 -c check_load
+#NRPE: Unable to read output
+#[root@nagios4419 koda]# 
+
+

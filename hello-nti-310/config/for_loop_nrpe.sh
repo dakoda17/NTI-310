@@ -1,0 +1,1 @@
+for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios4419 );  do gcloud compute ssh --zone us-east4-c koda@$servername --command='sudo yum -y install wget && sudo wget https://raw.githubusercontent.com/dakoda17/NTI-320/master/nagiosclient421 && sudo bash nagiosclient421'; done
