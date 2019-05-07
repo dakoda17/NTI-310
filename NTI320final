@@ -18,7 +18,7 @@ gcloud compute instances create nagios2 \
 --zone us-east1-b \
 --machine-type f1-micro \
 --scopes cloud-platform \
---metadata-from-file startup-script=NTI-310/hello-nti-310/config/Rsyslog
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/nagios4419
 
 #3 This script spins up a cacti server
 gcloud compute instances create cacti2 \
@@ -27,7 +27,7 @@ gcloud compute instances create cacti2 \
 --zone us-east1-b \
 --machine-type f1-micro \
 --scopes cloud-platform \
---metadata-from-file startup-script=NTI-310/hello-nti-310/config/Rsyslog
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/cacti_install
 
 #4 This script spins up a postgres server
 gcloud compute instances create postgres2 \
