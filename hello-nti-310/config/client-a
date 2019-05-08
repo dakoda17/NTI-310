@@ -38,3 +38,21 @@ access myGroup    ""    any    noauth     exact    all    all    none' >> /etc/s
 systemctl enable snmpd
 systemctl start snmpd
 
+#================install rsyslog client===============
+#This script spins up an rsyslog client
+
+#client automation
+yum -y update && yum -y install rsyslog
+systemctl start rsyslog
+systemctl enable rsyslog
+cp /etc/rsyslog.conf /etc/rsyslog.bak
+
+#needs to be the name of the client rsyslog server
+echo "*.*  @@rsyslog:514" >> /etc/rsyslog.conf
+systemctl restart rsyslog
+systemctl enable rsyslog
+
+#use the following to check to see that the client is logging onto the rsyslog server
+#tail -F var/log/messages 
+#echo "some text" | logger - this is a neat way to monitor what your rsyslog server is doing
+
