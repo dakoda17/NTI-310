@@ -16,6 +16,7 @@ gcloud compute instances create nagios2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-c \
+--tags "http-server","https-server" \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/nagios4419
@@ -25,6 +26,7 @@ gcloud compute instances create cacti2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-c \
+--tags "http-server","https-server" \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/cacti_install
