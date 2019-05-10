@@ -9,7 +9,7 @@ systemctl start nrpe
 
 yum -y install nagios-nrpe-server nagios-plugins
 yum -y install nrpe
-sed -i 's/allowed_hosts=127.0.0.1/allowed_hosts=127.0.0.1, 10.150.0.2/g' /etc/nagios/nrpe.cfg
+sed -i 's/allowed_hosts=127.0.0.1/allowed_hosts=127.0.0.1, 10.142.15.194/g' /etc/nagios/nrpe.cfg
 
 sed -i 's,#command\[check_users\]=/usr/lib64/nagios/plugins/check_users \$ARG1\$,command\[check_users\]=/usr/lib64/nagios/plugins/check_users -w 5 -c 10,g' /etc/nagios/nrpe.cfg
 
