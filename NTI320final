@@ -102,3 +102,12 @@ gcloud compute instances create ldapclient2 \
 
 for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios4419 );  do gcloud compute ssh --zone us-east1-c koda@$servername --command='sudo yum -y install wget && sudo wget https://raw.githubusercontent.com/dakoda17/NTI-320/master/nagiosclient421 && sudo bash nagiosclient421'; done
 
+#!/bin/bash
+#-v removes anything that matches nagios 
+for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios4419 );  do 
+    echo $servername;
+    serverip=$( gcloud compute instances list | grep $servername | awk '{print $4}');
+    echo $serverip ;
+    bash scp_to_nagios.sh $servername $serverip
+done
+gcloud compute ssh --zone us-east1-c koda@nagios4419 --command='sudo systemctl restart nagios'
