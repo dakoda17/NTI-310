@@ -120,7 +120,7 @@ gcloud compute instances create nfsclient2 \
 gcloud compute instances create ldapclient2 \
 --image-family ubuntu-1804-lts \
 --image-project ubuntu-os-cloud \
---zone us-east4-c \
+--zone us-east1-c \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/ldapclient.sh
