@@ -124,3 +124,4 @@ gcloud compute instances create ldapclient2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/ldapclient.sh
+
