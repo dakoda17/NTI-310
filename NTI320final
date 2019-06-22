@@ -1,5 +1,13 @@
 #!/bin/bash
 #this is the script for the NTI midterm
+#Adding the build server on the front end
+gcloud compute instances create rpmBuild2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-c \
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/rpm
 
 #1 This script spins up an rsyslog server
 gcloud compute instances create rsyslog2 \
