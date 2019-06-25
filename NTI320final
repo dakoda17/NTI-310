@@ -1,7 +1,7 @@
 #!/bin/bash
 #this is the script for the NTI midterm
 #Adding the build server on the front end
-gcloud compute instances create rpmBuild2 \
+gcloud compute instances create rpmbuild2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-c \
