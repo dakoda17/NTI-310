@@ -7,7 +7,7 @@ gcloud compute instances create rpmBuild2 \
 --zone us-east1-c \
 --machine-type f1-micro \
 --scopes cloud-platform \
---metadata-from-file startup-script=NTI-310/hello-nti-310/config/rpm
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/buildrpm
 
 #1 This script spins up an rsyslog server
 gcloud compute instances create rsyslog2 \
