@@ -1,43 +1,64 @@
 #!/bin/bash
 #this is the script for the NTI midterm
-#Adding the build server on the front end
+#Adding the build server and the repo server on the front end
+
+gcloud compute instances create reposerv2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-c \
+--private-network-ip=10.142.0.200 \
+--tags "http-server","https-server" \
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/createRepo
+sleep 10s
+
 gcloud compute instances create rpmbuild2 \
 --image-family centos-7 \
 --image-project centos-cloud \
+--boot-disk-size=50 \
 --zone us-east1-c \
+--private-network-ip=10.142.0.201 \
+--tags "http-server","https-server" \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/buildrpm
-
-#1 This script spins up an rsyslog server
-gcloud compute instances create rsyslog2 \
---image-family centos-7 \
---image-project centos-cloud \
---zone us-east1-c \
---machine-type f1-micro \
---scopes cloud-platform \
---metadata-from-file startup-script=NTI-310/hello-nti-310/config/Rsyslog
-#sleep 30s
+sleep 10s
 
 #2 This script spins up a nagios server
 gcloud compute instances create nagios2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-c \
+--private-network-ip=10.142.0.202 \
 --tags "http-server","https-server" \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/nagios4419
+sleep 10s
 
 #3 This script spins up a cacti server
 gcloud compute instances create cacti2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-c \
+--private-network-ip=10.142.0.203 \
 --tags "http-server","https-server" \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/cacti_install
+sleep 10s
+
+#1 This script spins up an rsyslog server
+gcloud compute instances create rsyslog2 \
+--image-family centos-7 \
+--image-project centos-cloud \
+--zone us-east1-c \
+--private-network-ip=10.142.0.204 \
+--machine-type f1-micro \
+--scopes cloud-platform \
+--metadata-from-file startup-script=NTI-310/hello-nti-310/config/Rsyslog
+sleep 10s
 
 #4 This script spins up a postgres server
 gcloud compute instances create postgres2 \
@@ -48,7 +69,8 @@ gcloud compute instances create postgres2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/postgrestest1
-#sleep 30s
+sleep 10s
+
 #This script spins up an rsyslog client
 #vim NTI-310/hello-nti-310/config/postgrestest1
 #sleep 15s
@@ -62,7 +84,8 @@ gcloud compute instances create ldap2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/continue_ldap_install
-#sleep 30s
+sleep 10s
+
 #This script spins up an rsyslog client
 #vim NTI-310/hello-nti-310/config/continue_ldap_install
 
@@ -71,10 +94,12 @@ gcloud compute instances create nfs2 \
 --image-family centos-7 \
 --image-project centos-cloud \
 --zone us-east1-c \
+--tags "http-server","https-server" \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/nfs_install
-#sleep 30s
+sleep 10s
+
 #This script spins up an rsyslog client
 
 #7 This script spins up a django  server
@@ -86,8 +111,7 @@ gcloud compute instances create django2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/djangopostgres
-#sleep 30s
-#This script spins up an rsyslog client
+sleep 10s
 
 #8 This script spins up nfsclient2 
 gcloud compute instances create nfsclient2 \
@@ -97,7 +121,7 @@ gcloud compute instances create nfsclient2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/client-a
-#sleep 10s
+sleep 10s
 
 #9 This script spins up ldapclient2 
 gcloud compute instances create ldapclient2 \
@@ -107,6 +131,7 @@ gcloud compute instances create ldapclient2 \
 --machine-type f1-micro \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/ldapclient.sh
+sleep 10s
 
 #for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios4419 );  do gcloud compute ssh --zone us-east1-c koda@$servername --command='sudo yum -y install wget && sudo wget https://raw.githubusercontent.com/dakoda17/NTI-310/master/hello-nti-310/config/nagiosclient421 && sudo bash nagiosclient421'; done
 
