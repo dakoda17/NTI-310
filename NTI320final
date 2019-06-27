@@ -108,7 +108,7 @@ gcloud compute instances create ldapclient2 \
 --scopes cloud-platform \
 --metadata-from-file startup-script=NTI-310/hello-nti-310/config/ldapclient.sh
 
-for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios4419 );  do gcloud compute ssh --zone us-east1-c koda@$servername --command='sudo yum -y install wget && sudo wget https://raw.githubusercontent.com/dakoda17/NTI-310/master/hello-nti-310/config/nagiosclient421 && sudo bash nagiosclient421'; done
+#for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios4419 );  do gcloud compute ssh --zone us-east1-c koda@$servername --command='sudo yum -y install wget && sudo wget https://raw.githubusercontent.com/dakoda17/NTI-310/master/hello-nti-310/config/nagiosclient421 && sudo bash nagiosclient421'; done
 
 #!/bin/bash
 #-v removes anything that matches nagios 
@@ -118,5 +118,8 @@ for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d"
     echo $serverip ;
     bash scp_to_nagios.sh $servername $serverip
 done
-for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios2 );  do gcloud compute ssh --zone us-east1-c koda@$servername --command='sudo yum -y install wget && sudo wget https://raw.githubusercontent.com/dakoda17/NTI-310/master/hello-nti-310/config/nagiosclient421 && sudo bash nagiosclient421'; done
 gcloud compute ssh --zone us-east1-c koda@nagios2 --command='sudo systemctl restart nagios'
+
+for servername in $(gcloud compute instances list | awk '{print $1}' | sed "1 d" | grep -v nagios2 );  do 
+    gcloud compute ssh --zone us-east1-c koda@$servername --command='sudo yum -y install wget && sudo wget https://raw.githubusercontent.com/dakoda17/NTI-310/master/hello-nti-310/config/nagiosclient421.sh && sudo bash nagiosclient421.sh'
+done
