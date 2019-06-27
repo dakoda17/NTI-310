@@ -16,7 +16,6 @@ sleep 10s
 gcloud compute instances create rpmbuild2 \
 --image-family centos-7 \
 --image-project centos-cloud \
---boot-disk-size=50 \
 --zone us-east1-c \
 --private-network-ip=10.142.0.201 \
 --tags "http-server","https-server" \
