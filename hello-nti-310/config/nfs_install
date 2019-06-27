@@ -35,7 +35,8 @@ systemctl enable rsyslog
 cp /etc/rsyslog.conf /etc/rsyslog.bak
 #needs to be the name of the client rsyslog server
 echo "*.*@@10.142.0.204:514" >> /etc/rsyslog.conf
-
+#restart rsyslog
+sudo systemctl restart rsyslog
 #ifconfig with ip address
 
 #used showmount -e 10.142.0.9 to prove mount
