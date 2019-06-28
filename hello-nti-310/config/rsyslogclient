@@ -8,7 +8,7 @@ systemctl enable rsyslog
 cp /etc/rsyslog.conf /etc/rsyslog.bak
 
 #needs to be the name of the client rsyslog server
-echo "*.*  @@rsyslog:514" >> /etc/rsyslog.conf
+echo "*.*  @@rsyslog2:514" >> /etc/rsyslog.conf
 systemctl restart rsyslog
 systemctl enable rsyslog
 
