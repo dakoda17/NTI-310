@@ -24,7 +24,7 @@ sed -i '51 s/^#//' /etc/nagios/nagios.cfg
 systemctl restart nagios
 
 #we also used this for the server
-./generate_config.sh nfs2 10.142.0.50
+./generate_config.sh nagios2 10.142.0.202
 systemctl restart nagios
 echo "define command{
                                 command_name check_nrpe
