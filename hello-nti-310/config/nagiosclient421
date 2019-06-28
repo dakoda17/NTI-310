@@ -2,8 +2,8 @@
 
 #this is my modified automation for the nagios client
 yum install -y nagios-nrpe-server nagios-plugins nrpe nagios-plugins-load nagios-plugins-ping nagios-plugins-disk nagios-plugins-http nagios-plugins-procs nagios-plugins-users wget
-wget -O /usr/lib64/nagios/plugins/check_mem.sh https://raw.githubusercontent.com/nic-instruction/NTI-320/master/nagios/check_mem.sh
-chmod +x /usr/lib64/nagios/plugins/check_mem.sh
+wget -O /usr/lib64/nagios/plugins/check_mem.sh https://raw.githubusercontent.com/nic-instruction/NTI-320/master/nagios/check_mem2.sh
+chmod +x /usr/lib64/nagios/plugins/check_mem2.sh
 systemctl enable nrpe
 systemctl start nrpe
 
