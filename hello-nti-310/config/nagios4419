@@ -86,7 +86,7 @@ define service{
         service_description             memory
         check_command                   check_nrpe!check_mem
 }
-"> "$host".cfg
+">> /etc/nagios/server/"$host".cfg
 
 #chmod +x /usr/lib64/nagios/plugins/check_mem.sh
 
